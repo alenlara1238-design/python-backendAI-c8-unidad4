@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 
 from app.database import Base, engine
@@ -6,7 +8,9 @@ from app.routers.evento_router import router as evento_router
 
 
 # Crea las tablas que todavía no existen.
-Base.metadata.create_all(bind=engine)
+# Las pruebas fijan TESTING=1 para no abrir la base de desarrollo.
+if os.getenv("TESTING") != "1":
+    Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI(

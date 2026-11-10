@@ -36,3 +36,19 @@ class EventoRepository:
         except Exception:
             db.rollback()
             raise
+
+    def update(
+        self,
+        db: Session,
+        evento: Evento
+    ) -> Evento:
+
+        try:
+            db.commit()
+            db.refresh(evento)
+
+            return evento
+
+        except Exception:
+            db.rollback()
+            raise

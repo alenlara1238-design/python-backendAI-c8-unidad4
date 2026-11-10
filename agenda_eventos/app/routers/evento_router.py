@@ -65,3 +65,28 @@ def create_evento(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(error)
         )
+
+
+@router.put("/{evento_id}", response_model=EventoResponse)
+def update_evento(
+    evento_id: int,
+    datos: EventoCreate,
+    db: Session = Depends(get_db)
+):
+
+    try:
+        evento = service.update(db, evento_id, datos)
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(error)
+        )
+
+    if evento is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Evento no encontrado"
+        )
+
+    return evento
